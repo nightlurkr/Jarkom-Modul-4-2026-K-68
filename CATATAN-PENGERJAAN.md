@@ -88,9 +88,9 @@ Pola: eth0 selalu menghadap ke atas, ke arah internet.
 - [x] Static routing 13 router
 - [x] Uji ping, minimal Mika di Shibuya ke Karl di Psyche
 - [x] Export project GNS3  (K-68_Modul4.gns3project)
-- [ ] Gambar pohon CIDR
+- [x] Gambar pohon CIDR  (pohon-cidr.png dan .svg)
 - [x] README bagian CIDR dan GNS3  (README.md)
-- [ ] Repo GitHub
+- [x] Repo GitHub
 - [ ] Samakan urutan label A1-A25 dengan Made
 - [ ] Sepakati netmask di baris Total sheet Rute
 - [ ] Submit

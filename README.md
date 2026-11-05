@@ -194,6 +194,10 @@ Dua aturan yang dipakai saat memberi alamat:
 
 ### Pohon CIDR
 
+![Pohon CIDR](pohon-cidr.png)
+
+Bentuk teksnya:
+
 ```
 J1 192.245.0.0/18
 |-- I1 192.245.0.0/19
@@ -311,9 +315,17 @@ Kabel ditarik berurutan dari Cyberia ke bawah, sehingga nomor interface tiap rou
 | Phantoma | Knights | Switch12 | Shibuya |  |
 | Shibuya | Phantoma | Switch13 |  |  |
 
-![Topologi GNS3](screenshot/topologi-gns3-terbangun.png)
+Topologi lengkap beserta jumlah host tiap node:
+
+![Topologi dengan jumlah host](screenshot/topologi-gns3-jumlah-host.png)
 
 Antar router disambung langsung tanpa switch, sesuai gambar soal. Switch2 menerima empat kabel sekaligus, dari Wired, Psyche, Copland, dan Schumann.
+
+Nomor interface tiap sambungan:
+
+![Topologi dengan label eth](screenshot/topologi-gns3-terbangun.png)
+
+Seluruh 52 node berjalan:
 
 ![Semua node menyala](screenshot/topologi-gns3-semua-node-jalan.png)
 
