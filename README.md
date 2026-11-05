@@ -11,7 +11,7 @@
 | Nama | NRP | Bagian |
 |---|---|---|
 | Ryan Adya Purwanto | 5027231046 | GNS3, metode CIDR |
-| Made Gde Krisna Wangsa | | Cisco Packet Tracer, metode VLSM |
+| Made Gde Krisna Wangsa | 5027201047 | Cisco Packet Tracer, metode VLSM |
 
 Laporan ini mencakup **bagian CIDR dan GNS3**.
 
