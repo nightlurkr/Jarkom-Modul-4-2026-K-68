@@ -1152,6 +1152,181 @@ ip route
 
 Seluruh topologi memakai blok `192.245.0.0/18` yang dibagi menjadi 25 subnet tanpa tumpang tindih. Semua node dapat saling terhubung, dibuktikan dengan ping dari node terdalam ke cabang terjauh dengan 0% packet loss.
 
+# Metode VLSM 
+
+Bagian ini menjelaskan pengerjaan topologi *The Wired Expansion* menggunakan **Cisco Packet Tracer (CPT)** dengan metode pembagian IP **VLSM (Variable Length Subnet Mask)**.
+
+| Parameter | Keterangan |
+|---|---|
+| Blok Akar (Root Block) | `192.245.0.0/18` |
+| Prefix IP | `192.245` |
+| Metode Pembagian | VLSM (dibagi dari kebutuhan host terbesar ke terkecil) |
+
+## 1. Perhitungan Kebutuhan IP dan Pembagian VLSM
+
+Sesuai ketentuan soal, jumlah IP yang dibutuhkan satu subnet adalah **jumlah host ditambah jumlah interface router** pada subnet tersebut. Terdapat 25 subnet yang dibagi berdasarkan urutan kebutuhan IP terbesar ke terkecil agar tidak ada alamat yang terbuang (efisien).
+
+Berikut adalah tabel pembagian alamat IP menggunakan VLSM:
+
+| Subnet | Rute / Segmen | Kebutuhan IP | Prefix | Network ID | Subnet Mask | Gateway Router |
+|---|---|---|---|---|---|---|
+| A21 | Psyche > Switch3 | 881 | /22 | `192.245.0.0` | 255.255.252.0 | `192.245.0.1` |
+| A12 | Accela > Switch5 | 514 | /22 | `192.245.4.0` | 255.255.252.0 | `192.245.4.1` |
+| A22 | Copland > Switch4 | 301 | /23 | `192.245.8.0` | 255.255.254.0 | `192.245.8.1` |
+| A10 | Tachibana > Switch9 | 267 | /23 | `192.245.10.0` | 255.255.254.0 | `192.245.10.1` |
+| A15 | Navi > Switch6 | 254 | /24 | `192.245.12.0` | 255.255.255.0 | `192.245.12.1` |
+| A17 | Navi > Switch8 | 143 | /24 | `192.245.13.0` | 255.255.255.0 | `192.245.13.1` |
+| A24 | Cyberia > Switch1 | 126 | /25 | `192.245.14.0` | 255.255.255.128 | `192.245.14.1` |
+| A8 | Deus > Switch10 | 99 | /25 | `192.245.14.128` | 255.255.255.128 | `192.245.14.129` |
+| A1 | Shibuya > Switch13 | 62 | /26 | `192.245.15.0` | 255.255.255.192 | `192.245.15.1` |
+| A16 | Navi > Switch7 | 58 | /26 | `192.245.15.64` | 255.255.255.192 | `192.245.15.65` |
+| A6 | Protocol7 > Switch11 | 33 | /26 | `192.245.15.128` | 255.255.255.192 | `192.245.15.129` |
+| A23 | Copland > Juri | 32 | /26 | `192.245.15.192` | 255.255.255.192 | `192.245.15.193` |
+| A2 | Phantoma > Switch12 | 15 | /27 | `192.245.16.0` | 255.255.255.224 | `192.245.16.1` |
+| A13 | Schumann > Akashic | 4 | /29 | `192.245.16.32` | 255.255.255.248 | `192.245.16.33` |
+| A18 | Wired > Switch2 | 4 | /29 | `192.245.16.40` | 255.255.255.248 | `192.245.16.41` |
+| A4 | Knights > Eiri | 3 | /29 | `192.245.16.48` | 255.255.255.248 | `192.245.16.49` |
+| A3 | Phantoma > Shibuya | 2 | /30 | `192.245.16.56` | 255.255.255.252 | `192.245.16.57` |
+| A5 | Knights > Phantoma | 2 | /30 | `192.245.16.60` | 255.255.255.252 | `192.245.16.61` |
+| A7 | Protocol7 > Knights | 2 | /30 | `192.245.16.64` | 255.255.255.252 | `192.245.16.65` |
+| A9 | Deus > Protocol7 | 2 | /30 | `192.245.16.68` | 255.255.255.252 | `192.245.16.69` |
+| A11 | Tachibana > Deus | 2 | /30 | `192.245.16.72` | 255.255.255.252 | `192.245.16.73` |
+| A14 | Schumann > Accela | 2 | /30 | `192.245.16.76` | 255.255.255.252 | `192.245.16.77` |
+| A19 | Wired > Navi | 2 | /30 | `192.245.16.80` | 255.255.255.252 | `192.245.16.81` |
+| A20 | Wired > Tachibana | 2 | /30 | `192.245.16.84` | 255.255.255.252 | `192.245.16.85` |
+| A25 | Cyberia > Wired | 2 | /30 | `192.245.16.88` | 255.255.255.252 | `192.245.16.89` |
+
+## 2. Membangun Topologi CPT
+* **Router**: Menggunakan seri `2811`. Karena keterbatasan port bawaan, beberapa router ditambahkan modul `NM-1FE-TX` atau `NM-2FE2W` untuk menambah interface (contoh: Cyberia, Wired, Deus).
+* **Switch**: Menggunakan `2960-24TT`.
+* **Kabel**: 
+  * `Copper Straight-Through` untuk PC/Laptop/Server ke Switch, Switch ke Router, dan Router ke Cloud.
+  * `Copper Cross-Over` untuk menghubungkan Router ke Router.
+
+![Topologi CPT](screenshot/vlsm-topologi-cpt.png)
+
+## 3. Konfigurasi End Devices
+Berikut adalah daftar pengalamatan IP untuk seluruh node host yang dikonfigurasi melalui tab *Desktop > IP Configuration*:
+
+| Nama Perangkat | IP Address | Subnet Mask | Default Gateway |
+|---|---|---|---|
+| Karl | `192.245.0.2` | 255.255.252.0 | `192.245.0.1` |
+| Lin | `192.245.0.3` | 255.255.252.0 | `192.245.0.1` |
+| Omnipresence | `192.245.4.2` | 255.255.252.0 | `192.245.4.1` |
+| Denpa | `192.245.4.3` | 255.255.252.0 | `192.245.4.1` |
+| Masayuki | `192.245.8.2` | 255.255.254.0 | `192.245.8.1` |
+| Juri | `192.245.15.194` | 255.255.255.192 | `192.245.15.193` |
+| Collective | `192.245.10.2` | 255.255.254.0 | `192.245.10.1` |
+| Ghost | `192.245.10.3` | 255.255.254.0 | `192.245.10.1` |
+| Alice | `192.245.12.2` | 255.255.255.0 | `192.245.12.1` |
+| Reika | `192.245.12.3` | 255.255.255.0 | `192.245.12.1` |
+| Yasuo | `192.245.13.2` | 255.255.255.0 | `192.245.13.1` |
+| Miho | `192.245.13.3` | 255.255.255.0 | `192.245.13.1` |
+| Kuma | `192.245.13.4` | 255.255.255.0 | `192.245.13.1` |
+| JJ | `192.245.14.2` | 255.255.255.128 | `192.245.14.1` |
+| MyuMyu | `192.245.14.3` | 255.255.255.128 | `192.245.14.1` |
+| Lillith | `192.245.14.130` | 255.255.255.128 | `192.245.14.129` |
+| Spector | `192.245.14.131` | 255.255.255.128 | `192.245.14.129` |
+| Taro | `192.245.15.66` | 255.255.255.192 | `192.245.15.65` |
+| Chisa | `192.245.15.130` | 255.255.255.192 | `192.245.15.129` |
+| Hodgson | `192.245.15.131` | 255.255.255.192 | `192.245.15.129` |
+| Serni | `192.245.16.2` | 255.255.255.224 | `192.245.16.1` |
+| Akashic | `192.245.16.34` | 255.255.255.248 | `192.245.16.33` |
+| Erin | `192.245.16.50` | 255.255.255.248 | `192.245.16.49` |
+| Lain | `192.245.15.2` | 255.255.255.192 | `192.245.15.1` |
+| Mika | `192.245.15.3` | 255.255.255.192 | `192.245.15.1` |
+
+## 4. Routing (Static & Default Route)
+Karena topologi berbentuk *tree* (pohon), digunakan metode **Default Route** untuk router ujung (leaf/cabang), dan **Static Route** di router pusat (Wired) serta Cyberia untuk mengenali jaringan di bawahnya.
+
+### A. Router Ujung (Psyche, Accela, Shibuya, dll)
+Cukup menggunakan satu default route mengarah ke router induk (parent).
+```cisco
+! Psyche
+ip route 0.0.0.0 0.0.0.0 192.245.16.41
+! Accela
+ip route 0.0.0.0 0.0.0.0 192.245.16.77
+! Shibuya
+ip route 0.0.0.0 0.0.0.0 192.245.16.57
+```
+
+### B. Router Wired
+Wired mendaftarkan rute spesifik untuk setiap LAN dan Link P2P di bawahnya agar bisa meneruskan paket dari/ke Cyberia.
+```cisco
+! Rute ke Cabang Kiri (via Psyche/Schumann)
+ip route 192.245.0.0 255.255.252.0 192.245.16.42
+ip route 192.245.8.0 255.255.254.0 192.245.16.43
+ip route 192.245.15.192 255.255.255.192 192.245.16.43
+ip route 192.245.16.32 255.255.255.248 192.245.16.44
+ip route 192.245.4.0 255.255.252.0 192.245.16.44
+
+! Rute ke Cabang Kanan (via Navi)
+ip route 192.245.12.0 255.255.255.0 192.245.16.82
+ip route 192.245.13.0 255.255.255.0 192.245.16.82
+ip route 192.245.15.64 255.255.255.192 192.245.16.82
+ip route 192.245.16.80 255.255.255.252 192.245.16.82
+
+! Rute ke Cabang Bawah (via Tachibana)
+ip route 192.245.10.0 255.255.254.0 192.245.16.86
+ip route 192.245.14.128 255.255.255.128 192.245.16.86
+ip route 192.245.15.0 255.255.255.192 192.245.16.86
+ip route 192.245.15.128 255.255.255.192 192.245.16.86
+ip route 192.245.16.0 255.255.255.224 192.245.16.86
+ip route 192.245.16.48 255.255.255.248 192.245.16.86
+ip route 192.245.16.56 255.255.255.252 192.245.16.86
+ip route 192.245.16.60 255.255.255.252 192.245.16.86
+ip route 192.245.16.64 255.255.255.252 192.245.16.86
+ip route 192.245.16.68 255.255.255.252 192.245.16.86
+ip route 192.245.16.72 255.255.255.252 192.245.16.86
+
+! Default Route ke Cyberia
+ip route 0.0.0.0 0.0.0.0 192.245.16.89
+```
+
+![Routing Wired](screenshot/vlsm-routing-wired.png)
+
+### C. Router Cyberia
+Menggunakan *Summary Route* untuk menjangkau seluruh jaringan di bawah Wired.
+```cisco
+ip route 192.245.0.0 255.255.0.0 192.245.16.90
+ip route 0.0.0.0 0.0.0.0 192.168.100.1
+```
+
+![Routing Cyberia](screenshot/vlsm-routing-cyberia.png)
+
+## 5. Konfigurasi NAT Overload
+Dikonfigurasi pada Router Cyberia sebagai satu-satunya gerbang menuju Cloud.
+```cisco
+interface FastEthernet0/0
+ ip nat outside
+ exit
+interface FastEthernet0/1
+ ip nat inside
+ exit
+interface FastEthernet1/0
+ ip nat inside
+ exit
+
+access-list 1 permit 192.245.0.0 0.0.255.255
+ip nat inside source list 1 interface FastEthernet0/0 overload
+```
+
+![NAT Cyberia](screenshot/vlsm-nat-translations.png)
+
+## 6. Pengujian
+Pengujian dilakukan dengan melakukan *Ping* dari ujung ke ujung (End-to-End) untuk membuktikan routing berjalan dua arah:
+1. **Laptop Lain (Shibuya) ke PC Karl (Psyche)**: `ping 192.245.0.2` -> **Reply**.
+2. **Laptop Alice (Navi) ke Laptop MyuMyu (Cyberia)**: `ping 192.245.14.3` -> **Reply**.
+3. **PC Omnipresence (Accela) ke Laptop Taro (Navi)**: `ping 192.245.15.66` -> **Reply**.
+
+![Ping Alice ke Karl](screenshot/vlsm-ping-alice-karl.png)
+
+**Uji NAT:**
+Karena pada topologi CPT tidak ada perangkat eksternal di luar Cloud, pengujian NAT dilakukan menggunakan *Extended Ping* dari Router Cyberia dengan *source address* IP internal (`192.245.14.1`), lalu dicek menggunakan perintah `show ip nat translations`. Tabel NAT berhasil menampilkan translasi IP, membuktikan NAT Overload berjalan dengan baik.
+
+## 7. Kesimpulan VLSM
+Berbeda dengan CIDR pada GNS3 yang menggabungkan subnet dan menghasilkan tabel routing yang singkat, VLSM di CPT membagi IP berdasarkan kebutuhan aktual. Hal ini membuat tabel routing di Router Wired menjadi lebih panjang dan spesifik, namun sangat efisien dalam hal penggunaan ruang alamat IP (tidak ada IP yang terbuang).
+
 Perbandingan antara dua metode pada topologi yang sama:
 
 | | VLSM | CIDR |
