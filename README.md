@@ -1311,7 +1311,7 @@ access-list 1 permit 192.245.0.0 0.0.255.255
 ip nat inside source list 1 interface FastEthernet0/0 overload
 ```
 
-![NAT Cyberia](screenshot/vlsm-nat-translations.png)
+![NAT Cyberia](screenshot/vlsm-nat-config.png)
 
 ## 6. Pengujian
 Pengujian dilakukan dengan melakukan *Ping* dari ujung ke ujung (End-to-End) untuk membuktikan routing berjalan dua arah:
