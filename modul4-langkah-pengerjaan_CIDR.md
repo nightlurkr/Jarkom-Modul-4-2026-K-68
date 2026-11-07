@@ -97,6 +97,17 @@ Contoh, A2 `/27` digabung A3 `/30` menghasilkan B1 `/26`.
 
 **Arah penggabungan** dimulai dari subnet terjauh dari cloud, yaitu Switch13 di Shibuya, lalu merambat menuju Cyberia.
 
+**Syarat sah sebuah penggabungan.** Dua blok hanya boleh digabung kalau ada satu router yang melihat keduanya lewat satu interface yang sama. Alasannya, satu blok hasil penggabungan nantinya diwakili satu baris route, dan satu baris route hanya bisa menyatakan satu arah. Karena itu bentuk pohon penggabungan selalu mengikuti bentuk topologi, bukan disusun bebas.
+
+**Jumlah penggabungan.** Satu penggabungan memproses dua blok menjadi satu, sehingga jumlah blok berkurang satu setiap kali. Dari 25 blok menuju 1 blok akar dibutuhkan 24 penggabungan. Jumlah tingkatnya mengikuti kedalaman topologi, dan jalur terdalam di sini ada 9 lapis, dari Switch13 di Shibuya sampai Cyberia.
+
+Berikut prosesnya tingkat demi tingkat pada gambar topologi. Setiap warna adalah satu blok yang masih berdiri sendiri pada tingkat tersebut.
+
+### Keadaan awal, 25 blok
+
+![Keadaan awal penggabungan](penggabungan/00-awal.png)
+
+
 **Urutan di router bercabang banyak.** Modul tidak menentukan cabang mana yang digabung lebih dulu. Di sini dipilih menggabungkan **dua blok terkecil lebih dulu**, karena aturan "satu tingkat di atas yang terbesar" membuat blok besar yang digabung terlalu awal terus menyeret hasilnya membesar di tiap tingkat berikutnya. Penggabungan yang dilakukan asal urut menghasilkan `/15`, yang bahkan tidak muat di prefix `/16`.
 
 **Tingkat I**
@@ -114,6 +125,8 @@ Contoh, A2 `/27` digabung A3 `/30` menghasilkan B1 `/26`.
 | B9 | A22 | /23 | A23 | /26 | /22 |
 | B10 | A24 | /25 | A25 | /30 | /24 |
 
+![Tingkat I](penggabungan/01-tingkat-I.png)
+
 **Tingkat II**
 
 | Subnet | Gabungan dari | Netmask | dan | Netmask | Netmask Akhir |
@@ -124,12 +137,16 @@ Contoh, A2 `/27` digabung A3 `/30` menghasilkan B1 `/26`.
 | C4 | A18 | /29 | B8 | /29 | /28 |
 | C5 | A21 | /22 | B9 | /22 | /21 |
 
+![Tingkat II](penggabungan/02-tingkat-II.png)
+
 **Tingkat III**
 
 | Subnet | Gabungan dari | Netmask | dan | Netmask | Netmask Akhir |
 |---|---|---|---|---|---|
 | D1 | C1 | /25 | B2 | /28 | /24 |
 | D2 | C3 | /22 | C4 | /28 | /21 |
+
+![Tingkat III](penggabungan/03-tingkat-III.png)
 
 **Tingkat IV**
 
@@ -138,11 +155,15 @@ Contoh, A2 `/27` digabung A3 `/30` menghasilkan B1 `/26`.
 | E1 | D1 | /24 | B3 | /25 | /23 |
 | E2 | D2 | /21 | C5 | /21 | /20 |
 
+![Tingkat IV](penggabungan/04-tingkat-IV.png)
+
 **Tingkat V**
 
 | Subnet | Gabungan dari | Netmask | dan | Netmask | Netmask Akhir |
 |---|---|---|---|---|---|
 | F1 | E1 | /23 | B4 | /24 | /22 |
+
+![Tingkat V](penggabungan/05-tingkat-V.png)
 
 **Tingkat VI**
 
@@ -150,11 +171,15 @@ Contoh, A2 `/27` digabung A3 `/30` menghasilkan B1 `/26`.
 |---|---|---|---|---|---|
 | G1 | F1 | /22 | B5 | /22 | /21 |
 
+![Tingkat VI](penggabungan/06-tingkat-VI.png)
+
 **Tingkat VII**
 
 | Subnet | Gabungan dari | Netmask | dan | Netmask | Netmask Akhir |
 |---|---|---|---|---|---|
 | H1 | G1 | /21 | C2 | /21 | /20 |
+
+![Tingkat VII](penggabungan/07-tingkat-VII.png)
 
 **Tingkat VIII**
 
@@ -162,11 +187,15 @@ Contoh, A2 `/27` digabung A3 `/30` menghasilkan B1 `/26`.
 |---|---|---|---|---|---|
 | I1 | H1 | /20 | E2 | /20 | /19 |
 
+![Tingkat VIII](penggabungan/08-tingkat-VIII.png)
+
 **Tingkat IX**
 
 | Subnet | Gabungan dari | Netmask | dan | Netmask | Netmask Akhir |
 |---|---|---|---|---|---|
 | J1 | I1 | /19 | B10 | /24 | /18 |
+
+![Tingkat IX](penggabungan/09-tingkat-IX.png)
 
 Blok akar **J1 = `192.245.0.0/18`**.
 
