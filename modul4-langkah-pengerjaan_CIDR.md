@@ -36,6 +36,12 @@ Dua hal yang mudah salah dibaca:
 - **Switch2 adalah satu segmen bersama empat router**, yaitu Wired, Psyche, Copland, dan Schumann. Bukan tiga link terpisah
 - **Satu node host mewakili banyak host.** Karl bertuliskan 700 host, tetapi yang dibuat tetap satu node
 
+Berikut pemetaan 25 subnet tersebut pada gambar topologi. Setiap elips adalah satu subnet, dan penomoran A1 sampai A25 inilah yang dipakai di seluruh dokumen ini serta di sheet Rute dan sheet Pembagian IP.
+
+![Pembagian 25 subnet pada topologi](topologi-pembagian-subnet.png)
+
+Catatan mengenai link Cyberia ke NAT1. Secara definisi link tersebut juga sebuah subnet, karena dia domain broadcast tersendiri, sehingga kalau seluruh segmen Layer 2 dihitung jumlahnya menjadi 26. Link itu sengaja tidak diberi nomor dan tidak ikut dihitung, karena interface `eth0` Cyberia yang menghadap NAT1 tidak kami alokasikan sendiri. Interface tersebut diset `dhcp` dan memperoleh alamat dari cloud NAT GNS3 pada range `192.168.122.0/24`, yang berada di luar prefix kelompok. Yang dibagi pada praktikum ini hanya subnet yang alamatnya diambil dari prefix `192.245.0.0/16`, dan jumlahnya **25**.
+
 ## Tahap 2: Menghitung kebutuhan IP tiap subnet
 
 Rumus dari soal: **jumlah host ditambah jumlah interface router yang berada di subnet itu**.
@@ -1266,7 +1272,7 @@ Hasil, semuanya 0% packet loss:
 ip route
 ```
 
-**Cyberia** hanya punya satu rute statis untuk menjangkau 24 subnet sekaligus.
+**Cyberia** hanya punya satu rute statis untuk menjangkau 23 subnet sekaligus.
 
 ![Routing Cyberia](screenshot/routing-cyberia.png)
 
@@ -1278,6 +1284,6 @@ ip route
 
 ![Routing Phantoma](screenshot/routing-phantoma.png)
 
-Tanpa penggabungan CIDR, Wired sendiri akan memerlukan lebih dari 20 rute.
+Tanpa penggabungan CIDR, Wired sendiri akan memerlukan 20 rute.
 
 **Catatan:** alpinet memakai BusyBox, sehingga opsi `ping` harus ditulis sebelum target. `ping -c 3 8.8.8.8` benar, `ping 8.8.8.8 -c 3` salah.

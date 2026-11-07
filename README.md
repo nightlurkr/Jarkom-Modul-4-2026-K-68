@@ -47,6 +47,12 @@ Dua hal yang perlu diperhatikan saat membaca topologi ini:
 1. **Switch2 adalah satu segmen bersama empat router**, yaitu Wired, Psyche, Copland, dan Schumann. Kalau dibaca sebagai tiga link terpisah, akan terbentuk tiga subnet mubazir dan pembagian IP menjadi tidak efisien
 2. **Satu node host mewakili banyak host.** Karl bertuliskan 700 host, tetapi yang dibuat tetap satu node. Angka itu hanya dipakai untuk menghitung ukuran subnet
 
+Gambar di bawah memetakan 25 subnet tersebut pada topologi soal. Setiap elips adalah satu subnet, dan penomoran A1 sampai A25 inilah yang dipakai di seluruh laporan ini serta di sheet Rute dan sheet Pembagian IP.
+
+![Pembagian 25 subnet pada topologi](topologi-pembagian-subnet.png)
+
+Catatan mengenai link Cyberia ke NAT1. Secara definisi link tersebut juga sebuah subnet, karena dia domain broadcast tersendiri, sehingga kalau seluruh segmen Layer 2 dihitung jumlahnya menjadi 26. Link itu sengaja tidak diberi nomor dan tidak ikut dihitung, karena interface `eth0` Cyberia yang menghadap NAT1 tidak kami alokasikan sendiri. Interface tersebut diset `dhcp` dan memperoleh alamat dari cloud NAT GNS3 pada range `192.168.122.0/24`, yang berada di luar prefix kelompok. Yang dibagi pada praktikum ini hanya subnet yang alamatnya diambil dari prefix `192.245.0.0/16`, dan jumlahnya **25**.
+
 ## Menentukan Kebutuhan IP Tiap Subnet
 
 Sesuai ketentuan soal, jumlah IP yang dibutuhkan satu subnet adalah **jumlah host ditambah jumlah interface router yang berada di subnet itu**.
@@ -1136,7 +1142,7 @@ ping -c 3 8.8.8.8
 ip route
 ```
 
-**Cyberia** hanya memiliki satu rute statis untuk menjangkau 24 subnet sekaligus.
+**Cyberia** hanya memiliki satu rute statis untuk menjangkau 23 subnet sekaligus.
 
 ![Routing Cyberia](screenshot/routing-cyberia.png)
 
@@ -1337,4 +1343,4 @@ Perbandingan antara dua metode pada topologi yang sama:
 | Tabel routing | lebih panjang | lebih pendek |
 | Menambah subnet baru | perlu hitung ulang | biasanya masih ada sisa rentang |
 
-CIDR memang memakai lebih banyak alamat, tetapi menghasilkan tabel routing yang jauh lebih sederhana. Pada topologi ini, Cyberia cukup memegang satu rute statis untuk menjangkau 24 subnet. Tanpa penggabungan, Wired sendiri akan memerlukan lebih dari 20 rute.
+CIDR memang memakai lebih banyak alamat, tetapi menghasilkan tabel routing yang jauh lebih sederhana. Pada topologi ini, Cyberia cukup memegang satu rute statis untuk menjangkau 23 subnet. Tanpa penggabungan, Wired sendiri akan memerlukan 20 rute.
